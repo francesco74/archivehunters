@@ -7,7 +7,7 @@ import 'package:archive_hunters/l10n/app_localizations.dart';
 class WebviewScreen extends StatefulWidget {
   final String url; // Parametro per l'URL
 
-  const WebviewScreen({Key? key, required this.url}) : super(key: key);
+  const WebviewScreen({super.key, required this.url});
 
   @override
   _WebviewScreenState createState() => _WebviewScreenState();

@@ -1,36 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:camera/camera.dart';
 import 'screens/splash_screen.dart';
 import 'services/storage_service.dart';
-import 'services/geofence_service.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:archive_hunters/l10n/app_localizations.dart'; 
-import 'package:provider/provider.dart'; // Importa provider
+import 'package:provider/provider.dart';
 import 'services/game_state_service.dart';
+import 'dart:ui';
 
-List<CameraDescription> cameras = [];
-
-// A global key to access the app's state and change the locale
+// Chiave globale per accedere allo stato dell'app e cambiare la lingua
 final GlobalKey<_TreasureHuntAppState> appKey = GlobalKey();
 
 Future<void> main() async {
-  // Ensure that plugin services are initialized
+  // Assicura che i servizi dei plugin siano inizializzati
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize the storage service
+  // Inizializza il servizio di storage
   await StorageService().init();
-  
-  // Initialize the geofence service
-  await GeofenceService().init();
 
-
-  // Obtain a list of the available cameras on the device.
-  try {
-    cameras = await availableCameras();
-  } on CameraException catch (e) {
-    print('Error: ${e.code}\nError Message: ${e.description}');
-  }
-  
   runApp(
     ChangeNotifierProvider(
       create: (context) => GameStateService(),
@@ -40,15 +26,30 @@ Future<void> main() async {
 }
 
 class TreasureHuntApp extends StatefulWidget {
-  const TreasureHuntApp({Key? key}) : super(key: key);
+  const TreasureHuntApp({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _TreasureHuntAppState createState() => _TreasureHuntAppState();
 }
 
- class _TreasureHuntAppState extends State<TreasureHuntApp> {
+class _TreasureHuntAppState extends State<TreasureHuntApp> {
   Locale? _locale;
   final StorageService _storageService = StorageService();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLocale();
+  }
+
+  void _loadLocale() {
+    String languageCode = _storageService.getLanguageCode();
+    // Se non c'è una lingua salvata, getLanguageCode ritorna quella del dispositivo.
+    setState(() {
+      _locale = Locale(languageCode);
+    });
+  }
 
   void changeLanguage(Locale locale) {
     setState(() {
@@ -61,7 +62,7 @@ class TreasureHuntApp extends StatefulWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Archive Hunters',
-      locale: _locale, // Use the stored locale
+      locale: _locale, // Usa la lingua salvata o quella di default
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -69,8 +70,8 @@ class TreasureHuntApp extends StatefulWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [
-        Locale('en'), // English
-        Locale('it'), // Italian
+        Locale('en'), // Inglese
+        Locale('it'), // Italiano
       ],
       theme: ThemeData(
         primarySwatch: Colors.orange,

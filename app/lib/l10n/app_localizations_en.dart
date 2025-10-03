@@ -138,7 +138,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get permissionsRequiredBody =>
-      'To provide the best experience, Archive Hunters needs access to your location to guide you in the treasure hunt and to your camera to recognize clues. Your data is used only for the game\'s functionality.';
+      'To provide the best experience, Archive Hunters needs access to your location to guide you in the treasure hunt and to your camera to recognize clues.\nYour data is used only for the game\'s functionality.\n\nSpecifically:\n•Location: To guide you on the map and detect when you enter a new hunt area.\n•Camera: To recognize clues and images that are part of the hunt.';
 
   @override
   String get locationPermissionReason =>
@@ -150,4 +150,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get okUnderstand => 'OK, I Understand';
+
+  @override
+  String get permissionsRequiredCamera =>
+      'Camera permission is required to recognize images.';
 }

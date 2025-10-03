@@ -8,7 +8,7 @@ import 'package:archive_hunters/l10n/app_localizations.dart';
 
 class PdfViewerScreen extends StatefulWidget {
   final String url;
-  const PdfViewerScreen({Key? key, required this.url}) : super(key: key);
+  const PdfViewerScreen({super.key, required this.url});
 
   @override
   _PdfViewerScreenState createState() => _PdfViewerScreenState();

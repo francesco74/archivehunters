@@ -1,0 +1,59 @@
+# pubspec.yaml
+name: archive_hunters
+description: Archive Hunters.
+
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+    # Core dependencies
+  cupertino_icons: ^1.0.8 # Updated from ^1.0.2
+  http: ^1.2.1 # Updated from ^1.2.0
+  provider: ^6.1.2 # Updated from ^6.1.1
+  intl: ^0.20.2 # Updated from ^0.20.1
+
+  # Map and Location
+  flutter_map: ^8.2.2 # Updated from ^8.2.1
+  latlong2: ^0.9.1 # Updated from ^0.9.0
+  location: ^8.0.1 # Latest stable version often includes transitive fixes
+  geolocator: ^14.0.2
+
+  # File/Media
+  camera: ^0.11.2 # Note: This package likely has newer major versions available if needed
+  tflite_flutter: ^0.11.0
+  image: ^4.2.0 # Updated from ^4.1.3
+  shared_preferences: ^2.2.3 # Updated from ^2.1.0
+  path_provider: ^2.1.3 # Updated from ^2.1.1
+  flutter_pdfview: ^1.4.3 # Updated from ^1.3.2
+
+  # Networking
+  webview_flutter: ^4.7.0
+  dio: ^5.4.3+1 # Updated from ^5.4.0
+
+  permission_handler: ^11.3.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter:
+  uses-material-design: true
+  generate: true
+  assets:
+    - assets/images/
+    - assets/icons/
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/logo.png"

@@ -42,8 +42,9 @@
 "english": "English",
 "italian": "Italian",
 "permissionsRequiredTitle": "Permissions Required",
-"permissionsRequiredBody": "To provide the best experience, Archive Hunters needs access to your location to guide you in the treasure hunt and to your camera to recognize clues. Your data is used only for the game's functionality.",
+"permissionsRequiredBody": "To provide the best experience, Archive Hunters needs access to your location to guide you in the treasure hunt and to your camera to recognize clues.\nYour data is used only for the game's functionality.\n\nSpecifically:\n•Location: To guide you on the map and detect when you enter a new hunt area.\n•Camera: To recognize clues and images that are part of the hunt.",
 "locationPermissionReason": "• Location: To guide you on the map and detect when you enter a new hunt area.",
 "cameraPermissionReason": "• Camera: To recognize clues and images that are part of the hunt.",
-"okUnderstand": "OK, I Understand"
+"okUnderstand": "OK, I Understand",
+"permissionsRequiredCamera": "Camera permission is required to recognize images."
 }

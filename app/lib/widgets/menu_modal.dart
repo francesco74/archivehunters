@@ -10,7 +10,6 @@ import 'package:archive_hunters/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../services/game_state_service.dart';
 
-
 void _showLanguageDialog(BuildContext context) {
   showDialog(
     context: context,
@@ -24,14 +23,16 @@ void _showLanguageDialog(BuildContext context) {
             onTap: () {
               // Use the global key to call the changeLanguage method
               appKey.currentState?.changeLanguage(const Locale('en'));
-              Provider.of<GameStateService>(context, listen: false).updateLanguage("en", context);
+              Provider.of<GameStateService>(context, listen: false)
+                  .updateLanguage("en", context);
               Navigator.of(ctx).pop();
             },
           ),
           ListTile(
             title: Text(AppLocalizations.of(context)!.italian),
             onTap: () {
-              Provider.of<GameStateService>(context, listen: false).updateLanguage("it", context);
+              Provider.of<GameStateService>(context, listen: false)
+                  .updateLanguage("it", context);
               Navigator.of(ctx).pop();
             },
           ),
@@ -53,16 +54,26 @@ void _showDownloadDialog(BuildContext context) {
   downloadService
       .downloadModel(
     modelUrl,
-    labelsUrl,
     (p) => progressNotifier.value = p,
   )
       .then((_) async {
-    progressNotifier.value = 1.0;
-    await Future.delayed(const Duration(milliseconds: 300));
-    Navigator.pop(context); // Close the dialog on completion
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(AppLocalizations.of(context)!.modelLoaded)),
-    );
+    downloadService
+        .downloadLabels(
+      labelsUrl,
+      (p) => progressNotifier.value = p,
+    )
+        .then((_) async {
+      progressNotifier.value = 1.0;
+      await Future.delayed(const Duration(milliseconds: 300));
+      Navigator.pop(context); // Close the dialog on completion
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context)!.modelLoaded)),
+      );
+    }).catchError((e) {
+      Navigator.pop(context); // Close the dialog on error
+      showErrorModal(
+          context, AppLocalizations.of(context)!.failedDownload, e.toString());
+    });
   }).catchError((e) {
     Navigator.pop(context); // Close the dialog on error
     showErrorModal(
@@ -106,7 +117,8 @@ void showMenuModal(BuildContext context) {
             onTap: () {
               final StorageService _storageService = StorageService();
               final langCode = _storageService.getLanguageCode();
-              final url = 'https://sc.provincia.lucca.it/archivehunters/istruzioni-$langCode.html';
+              final url =
+                  'https://sc.provincia.lucca.it/archivehunters/istruzioni-$langCode.html';
               Navigator.pop(modalContext);
               Navigator.of(context).push(
                 MaterialPageRoute(

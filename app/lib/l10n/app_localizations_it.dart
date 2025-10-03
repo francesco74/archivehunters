@@ -140,7 +140,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get permissionsRequiredBody =>
-      'Per offrire la migliore esperienza, Archive Hunters ha bisogno di accedere alla tua posizione per guidarti nella caccia al tesoro e alla tua fotocamera per riconoscere gli indizi. I tuoi dati vengono utilizzati solo per le funzionalità del gioco.';
+      'Per offrire la migliore esperienza, Archive Hunters ha bisogno di accedere alla tua posizione per guidarti nella caccia al tesoro e alla tua fotocamera per riconoscere gli indizi.\nI tuoi dati vengono utilizzati solo per le funzionalità del gioco.\n\nIn particolare\n• Posizione: Per guidarti sulla mappa e rilevare quando entri in una nuova area della caccia.\n• Fotocamera: Per riconoscere indizi e immagini che sono parte della caccia.';
 
   @override
   String get locationPermissionReason =>
@@ -151,5 +151,9 @@ class AppLocalizationsIt extends AppLocalizations {
       '• Fotocamera: Per riconoscere indizi e immagini che sono parte della caccia.';
 
   @override
-  String get okUnderstand => 'OK, capisco';
+  String get okUnderstand => 'OK, ho capito';
+
+  @override
+  String get permissionsRequiredCamera =>
+      'I permessi per l\'utilizzo della camera sono necessari per il riconoscimento delle immagini.';
 }

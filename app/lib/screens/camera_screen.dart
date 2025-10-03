@@ -4,13 +4,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
-import 'dart:typed_data';
 import 'package:image/image.dart' as img;
 import 'package:path_provider/path_provider.dart';
-import '../main.dart';
 import '../services/storage_service.dart';
 import '../widgets/error_modal.dart';
 import 'package:archive_hunters/l10n/app_localizations.dart'; 
+
+import 'package:permission_handler/permission_handler.dart';
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({Key? key}) : super(key: key);
@@ -31,12 +31,46 @@ class _CameraScreenState extends State<CameraScreen> {
   String? _trackedLabel;
   bool _isClosing = false; // Flag to prevent processing during screen closing
 
+  Future<void>? _initializeFuture;
+
   @override
   void initState() {
     super.initState();
-    _initializeCamera();
-    _loadTfLiteModel();
+    _initializeFuture = _initialize();
   }
+
+Future<void> _initialize() async {
+  try {
+    // 1. Richiedi il permesso per la fotocamera
+    var status = await Permission.camera.request();
+    if (status != PermissionStatus.granted) {
+      throw Exception(AppLocalizations.of(context)!.permissionsRequiredCamera);
+    }
+
+    // 2. Inizializza la fotocamera
+    final cameras = await availableCameras();
+    if (cameras.isEmpty) {
+      throw Exception('Nessuna fotocamera trovata');
+    }
+    _cameraController = CameraController(cameras[0], ResolutionPreset.high);
+    await _cameraController!.initialize();
+
+    // 3. Carica il modello TFLite
+    await _loadTfLiteModel();
+
+    // 4. Avvia lo stream di immagini
+    if (mounted) {
+      _cameraController!.startImageStream((CameraImage cameraImage) {
+        if (!_isDetecting && _interpreter != null && !_isClosing) {
+          _isDetecting = true;
+          _runModelOnFrame(cameraImage);
+        }
+      });
+    }
+  } catch (e) {
+    showErrorModal(context, "Initialization failed: ", e.toString());
+  }
+}
 
   Future<void> _loadTfLiteModel() async {
     try {
@@ -62,27 +96,10 @@ class _CameraScreenState extends State<CameraScreen> {
       _labels = labelsData.split('\n');
       
     } catch (e) {
-      showErrorModal(context, "Download Failed", e.toString());
+      showErrorModal(context, "Unable to load model: ", e.toString());
     }
   }
 
-  void _initializeCamera() {
-    if (cameras.isEmpty) {
-      // No camera available
-      return;
-    }
-    _cameraController = CameraController(cameras[0], ResolutionPreset.high);
-    _cameraController!.initialize().then((_) {
-      if (!mounted) return;
-      setState(() {});
-      _cameraController!.startImageStream((CameraImage cameraImage) {
-        if (!_isDetecting && _interpreter != null && !_isClosing) {
-          _isDetecting = true;
-          _runModelOnFrame(cameraImage);
-        }
-      });
-    });
-  }
 
   void _onImageConfirmed(int imageId) async {
     if (_isClosing) return; // Prevent multiple calls

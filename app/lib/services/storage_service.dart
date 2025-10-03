@@ -102,4 +102,6 @@ class StorageService {
       _prefs.getBool(_permissionsExplainedKey) ?? false;
   Future<void> setPermissionsExplained(bool value) =>
       _prefs.setBool(_permissionsExplainedKey, value);
+
+  
 }

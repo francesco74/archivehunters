@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 import '../services/game_state_service.dart';
 
 class MainHuntScreen extends StatefulWidget {
-  const MainHuntScreen({Key? key}) : super(key: key);
+  const MainHuntScreen({super.key});
 
   @override
   _MainHuntScreenState createState() => _MainHuntScreenState();

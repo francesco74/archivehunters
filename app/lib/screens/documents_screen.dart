@@ -8,7 +8,7 @@ import 'pdf_view_screen.dart';
 import 'package:archive_hunters/l10n/app_localizations.dart'; 
 
 class DocumentsScreen extends StatefulWidget {
-  const DocumentsScreen({Key? key}) : super(key: key);
+  const DocumentsScreen({super.key});
 
   @override
   _DocumentsScreenState createState() => _DocumentsScreenState();

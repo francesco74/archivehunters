@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'location_screen.dart';
+import 'package:camera/camera.dart';
 import '../services/storage_service.dart';
 import 'main_hunt_screen.dart';
 import 'package:archive_hunters/l10n/app_localizations.dart'; 
@@ -8,7 +9,7 @@ import '../widgets/permission_dialog.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -43,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen>
   Future<void> _startAppFlow() async {
     // 1. Controlla se abbiamo già spiegato e richiesto i permessi.
     bool permissionsExplained = _storageService.getPermissionsExplained();
-    if (!permissionsExplained) {
+    if (!permissionsExplained && mounted) {
       // Se è la prima volta, mostra il dialogo di spiegazione.
       await showPermissionExplanationDialog(context);
       _storageService.setPermissionsExplained(true);
@@ -55,6 +56,7 @@ class _SplashScreenState extends State<SplashScreen>
       Permission.location,
     ].request();
 
+    
     // 3. Dopo aver gestito i permessi, controlla se c'è una partita in corso.
     int statusId = _storageService.getIdStatus();
     if (statusId != 0) {

@@ -6,30 +6,42 @@ import 'package:path_provider/path_provider.dart';
 class DownloadService {
   final Dio _dio = Dio();
 
-  Future<void> downloadModel(String modelUrl, String labelsUrl, Function(double) onProgress) async {
-    try {
-      final dir = await getApplicationDocumentsDirectory();
-      final modelSavePath = '${dir.path}/model.tflite';
-      final labelsSavePath = '${dir.path}/labels.txt';
-      
-      await _dio.download(
-        labelsUrl,
-        labelsSavePath,
-      );
+  Future<String> _getFilePath(String filename) async {
+    final directory = await getApplicationDocumentsDirectory();
+    return '${directory.path}/$filename';
+  }
 
-      await _dio.download(
-        modelUrl,
-        modelSavePath,
-        onReceiveProgress: (received, total) {
-          if (total != -1) {
-            // Calculate and report the download progress
-            onProgress(received / total);
-          }
-        },
-      );
-      
-    } catch (e) {
-      throw Exception("Errore durante il caricamento del modello.");
+  Future<void> _downloadFile(String url, String savePath, Function(double) onProgress) async {
+    await _dio.download(
+      url,
+      savePath,
+      onReceiveProgress: (received, total) {
+        if (total != -1) {
+          onProgress(received / total);
+        }
+      },
+    );
+  }
+
+  Future<void> downloadModel(String url, Function(double) onProgress) async {
+    final path = await _getFilePath('model.tflite');
+    await _downloadFile(url, path, onProgress);
+  }
+
+  Future<void> downloadLabels(String url, Function(double) onProgress) async {
+    final path = await _getFilePath('labels.txt');
+    await _downloadFile(url, path, onProgress);
+  }
+
+  Future<String> getModelPath() => _getFilePath('model.tflite');
+  Future<String> getLabelsPath() => _getFilePath('labels.txt');
+
+  Future<List<String>> loadLabels(String path) async {
+    final file = File(path);
+    if (await file.exists()) {
+      final content = await file.readAsString();
+      return content.split('\n');
     }
+    return [];
   }
 }

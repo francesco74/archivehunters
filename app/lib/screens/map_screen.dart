@@ -12,11 +12,11 @@ class MapScreen extends StatefulWidget {
   final double centerLng;
   final List<GeofenceArea> geofenceAreas;
   const MapScreen({
-    Key? key,
+    super.key, 
     required this.centerLat,
     required this.centerLng,
     required this.geofenceAreas,
-  }) : super(key: key);
+  });
 
   @override
   _MapScreenState createState() => _MapScreenState();

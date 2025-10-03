@@ -353,7 +353,7 @@ abstract class AppLocalizations {
   /// No description provided for @permissionsRequiredBody.
   ///
   /// In en, this message translates to:
-  /// **'To provide the best experience, Archive Hunters needs access to your location to guide you in the treasure hunt and to your camera to recognize clues. Your data is used only for the game\'s functionality.'**
+  /// **'To provide the best experience, Archive Hunters needs access to your location to guide you in the treasure hunt and to your camera to recognize clues.\nYour data is used only for the game\'s functionality.\n\nSpecifically:\n•Location: To guide you on the map and detect when you enter a new hunt area.\n•Camera: To recognize clues and images that are part of the hunt.'**
   String get permissionsRequiredBody;
 
   /// No description provided for @locationPermissionReason.
@@ -373,6 +373,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'OK, I Understand'**
   String get okUnderstand;
+
+  /// No description provided for @permissionsRequiredCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera permission is required to recognize images.'**
+  String get permissionsRequiredCamera;
 }
 
 class _AppLocalizationsDelegate
